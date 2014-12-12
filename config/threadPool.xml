@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pools>
+	<attribute name="logPoolState">true</attribute>
+	<attribute name="logThreadState">true</attribute>
+
+	<!-- the default thread pool -->
+	<pool name="default">
+		<attribute name="corePoolSize" value="10" />
+		<attribute name="maxPoolSize" value="100" />
+		<attribute name="keepAliveTime" value="15" />
+		<attribute name="workQueueSize" value="100000" />
+	</pool>
+
+	<pool name="amesb_fund_service">
+		<attribute name="corePoolSize" value="10" />
+		<attribute name="maxPoolSize" value="100" />
+		<attribute name="keepAliveTime" value="15" />
+		<attribute name="workQueueSize" value="100000" />
+	</pool>
+
+</pools>

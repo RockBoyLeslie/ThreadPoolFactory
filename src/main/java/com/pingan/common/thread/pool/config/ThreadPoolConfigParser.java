@@ -12,27 +12,26 @@ public final class ThreadPoolConfigParser {
 
     private static final Logger LOG = Logger.getLogger(ThreadPoolConfigParser.class);
     private static final String THREAD_POOL_CONFIG = "threadPool.xml";
-    private static InputStream inputStream;
+    private static ThreadPoolFactoryConfig config = null;
 
     public static ThreadPoolFactoryConfig getConfig() {
-        try {
-            return (ThreadPoolFactoryConfig) getDigester().parse(getInputStream());
-        } catch (Exception e) {
-            LOG.error("failed to parse thread pool configuration", e);
-            return null;
-        }
-    }
-
-    private static InputStream getInputStream() {
-        if (inputStream == null) {
+        if (config == null) {
             synchronized (THREAD_POOL_CONFIG) {
-                if (inputStream == null) {
-                    inputStream = ThreadPoolConfigParser.class.getClassLoader().getResourceAsStream(THREAD_POOL_CONFIG);
+                if (config == null) {
+                    try {
+                        config = (ThreadPoolFactoryConfig) getDigester().parse(getInputStream());
+                    } catch (Exception e) {
+                        LOG.error("failed to parse thread pool configuration", e);
+                    }
                 }
             }
         }
 
-        return inputStream;
+        return config;
+    }
+
+    private static InputStream getInputStream() {
+        return ThreadPoolConfigParser.class.getClassLoader().getResourceAsStream(THREAD_POOL_CONFIG);
     }
 
     private static Digester getDigester() {

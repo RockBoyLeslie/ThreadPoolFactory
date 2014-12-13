@@ -55,6 +55,12 @@ public class ThreadPoolConfig {
     }
 
     @Override
+    public String toString() {
+        return "ThreadPoolConfig [name=" + name + ", corePoolSize=" + corePoolSize + ", maxPoolSize=" + maxPoolSize + ", keepAliveTime=" + keepAliveTime
+                + ", workQueueSize=" + workQueueSize + "]";
+    }
+
+    @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;

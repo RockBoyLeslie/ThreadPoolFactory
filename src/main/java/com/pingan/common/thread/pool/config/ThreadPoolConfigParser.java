@@ -5,6 +5,9 @@ import java.io.InputStream;
 import org.apache.commons.digester.Digester;
 import org.apache.log4j.Logger;
 
+/**
+ * 
+ */
 public final class ThreadPoolConfigParser {
 
     private static final Logger LOG = Logger.getLogger(ThreadPoolConfigParser.class);

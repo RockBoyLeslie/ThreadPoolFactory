@@ -36,9 +36,16 @@ public final class ThreadPoolConfigParser {
         Digester digester = new Digester();
         digester.setValidating(false);
 
+        // parse thread pool factory node
         digester.addObjectCreate("pools", ThreadPoolFactoryConfig.class);
-        digester.addSetProperties("pools/attribute", "logPoolState", "logPoolState");
-        digester.addSetProperties("pools/attribute", "logThreadState", "logThreadState");
+        digester.addSetProperties("pools/attribute");
+        digester.addSetProperty("pools/attribute", "name", "value");
+
+        // loop parse thread pool config node
+        digester.addObjectCreate("*/pool", ThreadPoolConfig.class);
+        digester.addSetProperties("*/pool");
+        digester.addSetProperty("*/pool/attribute", "name", "value");
+        digester.addSetNext("*/pool", "addThreadPoolConfig");
 
         return digester;
     }
@@ -47,6 +54,11 @@ public final class ThreadPoolConfigParser {
         ThreadPoolFactoryConfig config = ThreadPoolConfigParser.getConfig();
 
         System.out.println(config.isLogPoolState());
+        System.out.println(config.isLogThreadState());
+        for (ThreadPoolConfig poolConfig : config.getPoolConfigMap().values()) {
+            System.out.println(String.format("%s, %s, %s, %s", poolConfig.getCorePoolSize(), poolConfig.getMaxPoolSize(), poolConfig.getKeepAliveTime(),
+                    poolConfig.getWorkQueueSize()));
+        }
     }
 
 }

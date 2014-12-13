@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pools>
-	<attribute name="logPoolState">true</attribute>
-	<attribute name="logThreadState">true</attribute>
+	<attribute name="logPoolState" value="true"/>
+	<attribute name="logThreadState" value="true"/>
 
 	<!-- the default thread pool -->
 	<pool name="default">

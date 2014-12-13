@@ -14,6 +14,10 @@ public final class ThreadPoolConfigParser {
     private static final String THREAD_POOL_CONFIG = "threadPool.xml";
     private static ThreadPoolFactoryConfig config = null;
 
+    private ThreadPoolConfigParser() {
+
+    }
+
     public static ThreadPoolFactoryConfig getConfig() {
         if (config == null) {
             synchronized (THREAD_POOL_CONFIG) {
@@ -51,16 +55,4 @@ public final class ThreadPoolConfigParser {
 
         return digester;
     }
-
-    public static void main(String[] args) {
-        ThreadPoolFactoryConfig config = ThreadPoolConfigParser.getConfig();
-
-        System.out.println(config.isLogPoolState());
-        System.out.println(config.isLogThreadState());
-        for (ThreadPoolConfig poolConfig : config.getPoolConfigMap().values()) {
-            System.out.println(String.format("%s, %s, %s, %s", poolConfig.getCorePoolSize(), poolConfig.getMaxPoolSize(), poolConfig.getKeepAliveTime(),
-                    poolConfig.getWorkQueueSize()));
-        }
-    }
-
 }

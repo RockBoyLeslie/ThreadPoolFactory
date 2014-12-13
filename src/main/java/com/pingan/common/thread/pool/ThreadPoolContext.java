@@ -1,11 +1,5 @@
 package com.pingan.common.thread.pool;
 
-
-import com.pingan.common.thread.pool.config.ThreadPoolConfig;
-import com.pingan.common.thread.pool.config.ThreadPoolConfigParser;
-import com.pingan.common.thread.pool.config.ThreadPoolFactoryConfig;
-import com.pingan.common.thread.pool.state.AbstractStateMonitor;
-import com.pingan.common.thread.pool.state.ThreadPoolStateMonitor;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -16,17 +10,28 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 import org.apache.log4j.Logger;
+
+import com.pingan.common.thread.pool.config.ThreadPoolConfig;
+import com.pingan.common.thread.pool.config.ThreadPoolConfigParser;
+import com.pingan.common.thread.pool.config.ThreadPoolFactoryConfig;
+import com.pingan.common.thread.pool.state.AbstractStateMonitor;
+import com.pingan.common.thread.pool.state.ThreadPoolStateMonitor;
 
 public final class ThreadPoolContext {
 
     private static final Logger LOG = Logger.getLogger(ThreadPoolContext.class);
     private static final String DEFAULT_POOL = "default";
-    private static final long MONITOR_INTERVAL = 60;
+    private static final long MONITOR_INITIAL_DELAY = 10;
+    private static final long MONITOR_PERIOD = 60;
+    private static final int MONITOR_NUMBER = 2;
+    private static Lock CONTEXT_LOCK = new ReentrantLock();
     private static ThreadPoolContext context;
-    private static Object contextLock = new Object();
 
-    private ScheduledExecutorService monitorExecutor = Executors.newScheduledThreadPool(2);
+    private ScheduledExecutorService monitorExecutor = Executors.newScheduledThreadPool(MONITOR_NUMBER);
     private Map<String, ExecutorService> threadPools = new ConcurrentHashMap<String, ExecutorService>();
 
     private ThreadPoolContext() {
@@ -35,11 +40,11 @@ public final class ThreadPoolContext {
 
     public static ThreadPoolContext getContext() {
         if (context == null) {
-            synchronized (contextLock) {
-                if (context == null) {
-                    context = new ThreadPoolContext();
-                }
+            CONTEXT_LOCK.lock();
+            if (context == null) {
+                context = new ThreadPoolContext();
             }
+            CONTEXT_LOCK.unlock();
         }
 
         return context;
@@ -101,15 +106,11 @@ public final class ThreadPoolContext {
     private void initMonitors(ThreadPoolFactoryConfig poolFactoryConfig) {
         if (poolFactoryConfig.isLogPoolState()) {
             AbstractStateMonitor monitor = new ThreadPoolStateMonitor(threadPools);
-            monitorExecutor.scheduleAtFixedRate(monitor, 10, MONITOR_INTERVAL, TimeUnit.SECONDS);
+            monitorExecutor.scheduleAtFixedRate(monitor, MONITOR_INITIAL_DELAY, MONITOR_PERIOD, TimeUnit.SECONDS);
 
             if (LOG.isInfoEnabled()) {
                 LOG.info("start thread pool state monitor");
             }
-        }
-
-        if (poolFactoryConfig.isLogThreadState()) {
-
         }
     }
 }

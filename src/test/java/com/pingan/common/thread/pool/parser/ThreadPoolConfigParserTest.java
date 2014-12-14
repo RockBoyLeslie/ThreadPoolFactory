@@ -13,7 +13,7 @@ public class ThreadPoolConfigParserTest {
         System.out.println(String.format("monitor start initial delay %d", config.getInitialDelay()));
         System.out.println(String.format("monitor start period %d", config.getPeriod()));
         for (AbstractStateMonitor monitor : config.getStateMonitorMap().values()) {
-            System.out.println(monitor.getName());
+            System.out.println(String.format("monitor name %s", monitor.getName()));
         }
 
         for (ThreadPoolConfig poolConfig : config.getPoolConfigMap().values()) {

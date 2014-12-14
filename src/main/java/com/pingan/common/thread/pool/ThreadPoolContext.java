@@ -1,13 +1,10 @@
 package com.pingan.common.thread.pool;
 
 
-import com.pingan.common.thread.pool.config.ThreadPoolConfig;
-import com.pingan.common.thread.pool.config.ThreadPoolConfigParser;
-import com.pingan.common.thread.pool.config.ThreadPoolFactoryConfig;
-import com.pingan.common.thread.pool.state.AbstractStateMonitor;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
@@ -18,7 +15,13 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+
 import org.apache.log4j.Logger;
+
+import com.pingan.common.thread.pool.config.ThreadPoolConfig;
+import com.pingan.common.thread.pool.config.ThreadPoolConfigParser;
+import com.pingan.common.thread.pool.config.ThreadPoolFactoryConfig;
+import com.pingan.common.thread.pool.state.AbstractStateMonitor;
 
 /**
  * @function ThreadPool 工厂类， 负责根据用户配置的ThreadPool信息 创建相应的ThreadPool，
@@ -65,8 +68,8 @@ public final class ThreadPoolContext {
         return threadPools.get(poolName);
     }
 
-    public Map<String, ExecutorService> getThreadPools() {
-        return threadPools;
+    public Set<String> poolNames() {
+        return threadPools.keySet();
     }
 
     public void destroy() {

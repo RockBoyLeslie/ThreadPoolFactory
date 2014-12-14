@@ -26,8 +26,8 @@ public class ThreadStateMonitor extends AbstractStateMonitor {
     }
 
     private Set<ThreadGroup> getMonioredThreadGroups() {
-        Set<String> threadGroupNames = new HashSet<String>(threadPoolContext.getThreadPools().size());
-        for (String poolName : threadPoolContext.getThreadPools().keySet()) {
+        Set<String> threadGroupNames = new HashSet<String>(threadPoolContext.poolNames().size());
+        for (String poolName : threadPoolContext.poolNames()) {
             threadGroupNames.add(ThreadUtils.getThreadGroupName(poolName));
         }
 

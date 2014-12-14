@@ -13,7 +13,7 @@
 		<attribute name="corePoolSize" value="10" />
 		<attribute name="maxPoolSize" value="100" />
 		<attribute name="keepAliveTime" value="15" />
-		<attribute name="workQueueSize" value="100000" />
+		<attribute name="workQueueSize" value="10000" />
 	</pool>
 
 	<!-- amesb 基金服务线程池 -->

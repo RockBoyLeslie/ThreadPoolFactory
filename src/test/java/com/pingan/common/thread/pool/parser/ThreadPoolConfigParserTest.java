@@ -17,7 +17,7 @@ public class ThreadPoolConfigParserTest {
         }
 
         for (ThreadPoolConfig poolConfig : config.getPoolConfigMap().values()) {
-            System.out.println(poolConfig.getName());
+            System.out.println(String.format("pool name %s", poolConfig.getName()));
         }
     }
 }

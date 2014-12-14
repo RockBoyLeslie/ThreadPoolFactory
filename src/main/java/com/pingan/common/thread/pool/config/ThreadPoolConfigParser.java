@@ -44,15 +44,17 @@ public final class ThreadPoolConfigParser {
 
         // parse thread pool factory node
         digester.addObjectCreate("pools", ThreadPoolFactoryConfig.class);
-        digester.addSetProperties("pools/attribute");
-        digester.addSetProperty("pools/attribute", "name", "value");
+        digester.addSetProperties("pools/monitors");
+        digester.addFactoryCreate("pools/monitors/monitor", StateMonitorFactory.class);
+        digester.addSetNext("pools/monitors/monitor", "addStateMonitor");
 
         // loop parse thread pool config node
         digester.addObjectCreate("*/pool", ThreadPoolConfig.class);
         digester.addSetProperties("*/pool");
         digester.addSetProperty("*/pool/attribute", "name", "value");
         digester.addSetNext("*/pool", "addThreadPoolConfig");
-
+        
         return digester;
     }
+
 }

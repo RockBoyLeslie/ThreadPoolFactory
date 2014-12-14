@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pools>
-	<attribute name="logPoolState" value="true"/>
-	<attribute name="logThreadState" value="true"/>
+	<!-- 线程监控任务组，  目前提供线程池状态监控和线程池中的线程状态监控，  用于可以实现AbstractStateMonitor 并配置添加自己的监控任务 -->
+	<monitors initialDelay="5" period="60">
+		<monitor name="threadPoolMonitor"
+			class="com.pingan.common.thread.pool.state.ThreadPoolStateMonitor" />
+		<monitor name="threadMonitor"
+			class="com.pingan.common.thread.pool.state.ThreadStateMonitor" />
+	</monitors>
 
-	<!-- the default thread pool -->
+	<!-- 默认的业务线程池 -->
 	<pool name="default">
 		<attribute name="corePoolSize" value="10" />
 		<attribute name="maxPoolSize" value="100" />
@@ -11,11 +16,12 @@
 		<attribute name="workQueueSize" value="100000" />
 	</pool>
 
-	<pool name="amesb_fund_service">
+	<!-- amesb 基金服务线程池 -->
+	<pool name="amesbFundService">
 		<attribute name="corePoolSize" value="10" />
-		<attribute name="maxPoolSize" value="100" />
+		<attribute name="maxPoolSize" value="30" />
 		<attribute name="keepAliveTime" value="15" />
-		<attribute name="workQueueSize" value="100000" />
+		<attribute name="workQueueSize" value="5000" />
 	</pool>
 
 </pools>
